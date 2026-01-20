@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6 text-center">
+            <h1 class="mb-4">Welcome to Royal Bingo</h1>
+            <div class="card shadow-sm p-4">
+                <h3>Step 1: Join our Telegram Bot</h3>
+                <p>To register, you must first start our Telegram bot to receive your verification code.</p>
+                <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg mb-3">
+                    <i class="bi bi-telegram"></i> Open Telegram Bot
+                </a>
+                <div class="mt-3">
+                    <p>Once you've started the bot, click the button below:</p>
+                    <a href="{{ url_for('signup') }}" class="btn btn-success btn-lg">I have joined</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

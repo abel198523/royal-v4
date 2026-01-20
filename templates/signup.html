@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm p-4" id="signup-container">
+                <h2 class="text-center mb-4">Registration</h2>
+                <div id="signup-step">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" id="username" class="form-input w-100 p-2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" id="password" class="form-input w-100 p-2" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telegram Chat ID</label>
+                        <input type="text" id="telegram_chat_id" class="form-input w-100 p-2" placeholder="Get this from the bot" required>
+                        <small class="text-muted">Type /id in the bot to get your ID</small>
+                    </div>
+                    <button onclick="sendOTP()" id="otp-btn" class="btn btn-primary w-100">Send Verification Code</button>
+                </div>
+
+                <div id="otp-step" style="display:none;">
+                    <div class="alert alert-info">Verification code sent to your Telegram!</div>
+                    <div class="mb-3">
+                        <label class="form-label">Enter 6-digit Code</label>
+                        <input type="text" id="otp" class="form-input w-100 p-2 text-center" maxlength="6" style="letter-spacing: 5px; font-size: 1.5rem;">
+                    </div>
+                    <button onclick="verifyAndRegister()" class="btn btn-success w-100">Verify & Register</button>
+                    <button onclick="backToSignup()" class="btn btn-link w-100 mt-2">Back</button>
+                </div>
+                <div id="error-msg" class="text-danger mt-3 text-center"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+async function sendOTP() {
+    const username = document.getElementById('username').value;
+    const telegram_chat_id = document.getElementById('telegram_chat_id').value;
+    const btn = document.getElementById('otp-btn');
+    const errorMsg = document.getElementById('error-msg');
+    
+    if(!username || !telegram_chat_id) {
+        errorMsg.innerText = "Please fill all fields";
+        return;
+    }
+
+    btn.disabled = true;
+    errorMsg.innerText = "";
+
+    try {
+        const response = await fetch('/send-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ telegram_chat_id, username })
+        });
+        const data = await response.json();
+        if (data.success) {
+            document.getElementById('signup-step').style.display = 'none';
+            document.getElementById('otp-step').style.display = 'block';
+        } else {
+            errorMsg.innerText = data.message;
+        }
+    } catch (e) {
+        errorMsg.innerText = "Connection error";
+    } finally {
+        btn.disabled = false;
+    }
+}
+
+async function verifyAndRegister() {
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const telegram_chat_id = document.getElementById('telegram_chat_id').value;
+    const otp = document.getElementById('otp').value;
+    const errorMsg = document.getElementById('error-msg');
+
+    try {
+        const response = await fetch('/verify-otp', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username, password, telegram_chat_id, otp })
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = '/';
+        } else {
+            errorMsg.innerText = data.message;
+        }
+    } catch (e) {
+        errorMsg.innerText = "Verification failed";
+    }
+}
+
+function backToSignup() {
+    document.getElementById('otp-step').style.display = 'none';
+    document.getElementById('signup-step').style.display = 'block';
+}
+</script>
+{% endblock %}
