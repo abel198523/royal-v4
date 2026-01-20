@@ -24,5 +24,9 @@ if BOT_TOKEN:
     @bot.message_handler(commands=['id'])
     def send_id(message):
         bot.reply_to(message, f"የእርስዎ Chat ID: `{message.chat.id}`", parse_mode='Markdown')
+
+    if __name__ == "__main__":
+        print("Bot is starting...")
+        bot.infinity_polling()
 else:
     print("TELEGRAM_BOT_TOKEN not found. Bot functionality disabled.")
