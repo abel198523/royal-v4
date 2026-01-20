@@ -32,9 +32,9 @@ function showLoginScreen() {
         const appContainer = document.getElementById('app-container');
         const mainContent = document.getElementById('main-content');
 
-        if (gameScreen) gameScreen.style.display = 'none';
-        if (stakeScreen) stakeScreen.style.display = 'none';
-        if (gameBoard) gameBoard.style.display = 'none';
+        if (gameScreen) gameScreen.style.setProperty('display', 'none', 'important');
+        if (stakeScreen) stakeScreen.style.setProperty('display', 'none', 'important');
+        if (gameBoard) gameBoard.style.setProperty('display', 'none', 'important');
         
         // Ensure app-container and main-content are NOT hidden
         if (appContainer) appContainer.style.display = 'block';
@@ -42,7 +42,7 @@ function showLoginScreen() {
 
         const loginScreen = document.getElementById('login-screen');
         if (loginScreen) {
-            loginScreen.style.display = 'block';
+            loginScreen.style.setProperty('display', 'block', 'important');
         } else {
             console.error("login-screen element not found!");
             alert("Error: Login screen missing in HTML!");
