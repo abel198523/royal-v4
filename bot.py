@@ -19,7 +19,13 @@ if BOT_TOKEN:
             f"የእርስዎ Chat ID: `{message.chat.id}`\n\n"
             "ይህንን ቁጥር በመያዝ ወደ ዌብሳይቱ ተመልሰው ምዝገባዎን ያጠናቅቁ።"
         )
-        bot.reply_to(message, welcome_text, parse_mode='Markdown')
+        
+        markup = telebot.types.InlineKeyboardMarkup()
+        web_url = f"https://{os.environ.get('REPLIT_DEV_DOMAIN')}"
+        btn = telebot.types.InlineKeyboardButton("ወደ ዌብሳይቱ ይሂዱ", url=web_url)
+        markup.add(btn)
+        
+        bot.reply_to(message, welcome_text, reply_markup=markup, parse_mode='Markdown')
 
     @bot.message_handler(commands=['id'])
     def send_id(message):
