@@ -4,10 +4,8 @@ from models import User, Room, Transaction, GameSession
 import random
 import requests
 import os
-from werkzeug.security import generate_password_hash
 
-# Temp storage for OTPs
-OTPS = {}
+# Temp storage for OTPs (Removed)
 
 def get_or_create_session(room_id):
     room = Room.query.get(room_id)
@@ -27,68 +25,6 @@ def get_or_create_session(room_id):
         room.active_session_id = session.id
         db.session.commit()
     return session
-
-@app.route("/landing")
-def landing():
-    return render_template("landing.html")
-
-@app.route("/signup")
-def signup():
-    return render_template("signup.html")
-
-@app.route("/send-otp", methods=["POST"])
-def send_otp():
-    data = request.json
-    telegram_chat_id = data.get("telegram_chat_id")
-    bot_token = os.environ.get("TELEGRAM_BOT_TOKEN")
-
-    if not bot_token:
-        return jsonify({"success": False, "message": "Bot token not configured"}), 500
-
-    check_url = f"https://api.telegram.org/bot{bot_token}/getChatMember?chat_id={telegram_chat_id}&user_id={telegram_chat_id}"
-    try:
-        res = requests.get(check_url).json()
-        if not res.get("ok"):
-            return jsonify({"success": False, "message": "እባክዎ መጀመሪያ ቦቱን ይቀላቀሉ"}), 400
-    except:
-        return jsonify({"success": False, "message": "Connection error"}), 500
-
-    otp = str(random.randint(100000, 999999))
-    OTPS[telegram_chat_id] = otp
-    
-    send_url = f"https://api.telegram.org/bot{bot_token}/sendMessage"
-    requests.post(send_url, json={
-        "chat_id": telegram_chat_id,
-        "text": f"🎮 ወደ ROYAL BINGO ዌብሳይት ለመሄድ ከታች ያለውን ሊንክ ይጫኑ፦\n\nhttps://royal-v3-1.onrender.com\n\nYour registration code is: {otp}"
-    })
-    
-    return jsonify({"success": True})
-
-@app.route("/verify-otp", methods=["POST"])
-def verify_otp():
-    data = request.json
-    username = data.get("username")
-    password = data.get("password")
-    telegram_chat_id = data.get("telegram_chat_id")
-    user_otp = data.get("otp")
-
-    if OTPS.get(telegram_chat_id) == user_otp:
-        if User.query.filter_by(telegram_chat_id=telegram_chat_id).first():
-            return jsonify({"success": False, "message": "ይህ አካውንት ቀድሞ ተመዝግቧል"}), 400
-
-        try:
-            new_user = User()
-            new_user.username = username
-            new_user.telegram_chat_id = telegram_chat_id
-            new_user.password_hash = generate_password_hash(password)
-            db.session.add(new_user)
-            db.session.commit()
-            return jsonify({"success": True})
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"success": False, "message": "Registration failed. Try different username."}), 400
-            
-    return jsonify({"success": False, "message": "ትክክለኛ ያልሆነ ኮድ"}), 400
 
 @app.route("/")
 def index():
