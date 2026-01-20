@@ -1,6 +1,14 @@
 // game.js - Corrected logic to show login-screen by default
 window.onload = () => {
-    console.log("Game initialized");
+    console.log("Game initialized on " + window.location.hostname);
+    
+    // Force visibility of main structural elements
+    const mainContent = document.getElementById('main-content');
+    if (mainContent) {
+        mainContent.style.setProperty('display', 'block', 'important');
+        mainContent.style.setProperty('visibility', 'visible', 'important');
+    }
+    
     showLoginScreen();
 };
 
