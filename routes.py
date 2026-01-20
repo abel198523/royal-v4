@@ -95,6 +95,14 @@ def verify_otp():
             
     return jsonify({"success": False, "message": "ትክክለኛ ያልሆነ ኮድ"}), 400
 
+@app.route("/api/user/balance")
+def get_balance():
+    # Hardcoded for the default user as specified in the current index route logic
+    user = User.query.filter_by(telegram_chat_id='0980682889').first()
+    if user:
+        return jsonify({"balance": user.balance})
+    return jsonify({"balance": 0.0, "error": "User not found"}), 404
+
 @app.route("/")
 def index():
     # In a real app, we would check for a session/cookie
