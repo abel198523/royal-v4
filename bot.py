@@ -1,7 +1,6 @@
 import os
 import telebot
-from app import app, db
-from models import User
+from flask import request, jsonify
 
 # Get token from environment
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
@@ -10,7 +9,7 @@ BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 bot = None
 
 if BOT_TOKEN:
-    bot = telebot.TeleBot(BOT_TOKEN)
+    bot = telebot.TeleBot(BOT_TOKEN, threaded=False)
 
     @bot.message_handler(commands=['start'])
     def send_welcome(message):

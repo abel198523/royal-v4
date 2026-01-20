@@ -1,10 +1,23 @@
+import os
+import telebot
 from flask import render_template, request, jsonify, redirect, url_for
 from app import app, db
 from models import User, Room, Transaction, GameSession
 import random
 import requests
-import os
 from werkzeug.security import generate_password_hash
+from bot import bot, BOT_TOKEN
+
+@app.route('/webhook/' + (BOT_TOKEN if BOT_TOKEN else 'token'), methods=['POST'])
+def webhook():
+    if request.headers.get('content-type') == 'application/json':
+        json_string = request.get_data().decode('utf-8')
+        update = telebot.types.Update.de_json(json_string)
+        if bot:
+            bot.process_new_updates([update])
+        return ''
+    else:
+        return jsonify({"error": "Forbidden"}), 403
 
 # Temp storage for OTPs
 OTPS = {}
