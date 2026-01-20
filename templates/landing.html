@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
 <div class="content-wrapper">
-    <div class="container py-5" id="main-content">
+    <div class="container py-5" id="main-content" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
         <div class="row justify-content-center">
-            <div class="col-lg-7 text-center">
+            <div class="col-lg-8 text-center">
                 <!-- Hero Section -->
                 <div class="hero-section mb-5">
                     <div class="mb-4">
@@ -14,28 +14,28 @@
                 </div>
 
                 <!-- Steps Section -->
-                <div class="card p-4 p-md-5 mb-4 welcome-card">
+                <div class="card p-4 p-md-5 mb-4 welcome-card shadow-lg" style="background-color: #1a1f29 !important; border: 1px solid rgba(255,255,255,0.1) !important;">
                     <div class="step-badge mb-4 mx-auto">Step 1</div>
-                    <h2 class="h3 mb-4">Join our Telegram Bot First</h2>
-                    <p class="mb-5 fs-5">To get your verification code and start playing, you must first join our official Telegram bot.</p>
+                    <h2 class="h3 mb-4 text-white">Join our Telegram Bot First</h2>
+                    <p class="mb-5 fs-5 text-light">To get your verification code and start playing, you must first join our official Telegram bot.</p>
                     
                     <div class="d-grid gap-3">
-                        <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill">
+                        <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill fw-bold shadow">
                             <i class="bi bi-telegram me-2"></i> Join Telegram Bot
                         </a>
                         
                         <div class="separator my-3">
-                            <span>THEN</span>
+                            <span style="background: #1a1f29 !important; color: #6c757d !important;">THEN</span>
                         </div>
                         
-                        <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2">
+                        <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2 fw-bold">
                             I Have Joined
                         </a>
                     </div>
                 </div>
                 
-                <div class="text-muted">
-                    <small>Already have an account? <a href="{{ url_for('signup') }}" class="text-primary text-decoration-none">Sign In</a></small>
+                <div class="text-muted mt-4">
+                    <p>Already have an account? <a href="{{ url_for('signup') }}" class="text-primary text-decoration-none fw-bold">Sign In Here</a></p>
                 </div>
             </div>
         </div>
@@ -43,12 +43,17 @@
 </div>
 
 <style>
+    #main-content {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+    
     .hero-section {
         animation: fadeInDown 1s ease-out;
     }
     
     .welcome-card {
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
         animation: fadeInUp 1s ease-out;
     }
     
@@ -79,11 +84,9 @@
     }
     
     .separator span {
-        background: #1a1f29;
         padding: 0 15px;
-        color: #6c757d;
         font-weight: bold;
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         position: relative;
         z-index: 2;
     }
