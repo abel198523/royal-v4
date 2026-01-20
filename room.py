@@ -2,9 +2,8 @@ import random
 from app import db
 from models import Room
 
-def get_bingo_card(room_id):
-    """Generates a random 5x5 Bingo card (with center FREE space)"""
-    # Define ranges for each column (B, I, N, G, O)
+def get_bingo_card(user_id, room_id):
+    """Generates a random 5x5 Bingo card and links it to a specific room"""
     ranges = {
         'B': range(1, 16),
         'I': range(16, 31),
@@ -13,14 +12,12 @@ def get_bingo_card(room_id):
         'O': range(61, 76)
     }
     
-    card = []
-    # Generate 5 numbers for each column range
     cols = []
     for char in ['B', 'I', 'N', 'G', 'O']:
         nums = random.sample(ranges[char], 5)
         cols.append(nums)
         
-    # Transpose to get rows
+    card_data = []
     for r in range(5):
         row = []
         for c in range(5):
@@ -28,36 +25,36 @@ def get_bingo_card(room_id):
                 row.append(0)  # Center FREE space
             else:
                 row.append(cols[c][r])
-        card.append(row)
+        card_data.append(row)
     
-    return card
+    # እዚህ ጋር ነው ካርዱን ከሩሙ ጋር የምናቆራኘው
+    return card_data
 
 def initialize_rooms():
-    """Ensures exactly three rooms exist: 5, 10, and 20 ETB"""
-    existing_rooms = Room.query.all()
+    """strictly ensures only 5, 10, and 20 ETB rooms exist"""
     room_data = [
         {"name": "Bronze Room", "card_price": 5.0},
         {"name": "Silver Room", "card_price": 10.0},
         {"name": "Gold Room", "card_price": 20.0}
     ]
     
-    # If room count isn't 3, reset them
-    if len(existing_rooms) != 3:
-        # Clear existing
-        for r in existing_rooms:
-            db.session.delete(r)
+    # ሁሉንም አጥፍቶ በአዲስ መጀመር (Clean Slate)
+    try:
+        Room.query.delete() 
         db.session.commit()
         
-        # Create new ones
         for data in room_data:
             new_room = Room(name=data["name"], card_price=data["card_price"])
             db.session.add(new_room)
         db.session.commit()
+        print("Rooms initialized: 5, 10, 20 only.")
+    except Exception as e:
+        db.session.rollback()
+        print(f"Error initializing rooms: {e}")
 
 def get_room_by_id(room_id):
-    """Isolates room data using ID"""
     return Room.query.get(room_id)
 
 def get_room_by_price(price):
-    """Isolates room data using price/amount"""
+    # ዋጋውን ወደ float ቀይሮ በትክክል ፊልተር ማድረግ
     return Room.query.filter_by(card_price=float(price)).first()
