@@ -25,8 +25,12 @@ if BOT_TOKEN:
         markup = types.InlineKeyboardMarkup()
         domain = os.environ.get('REPLIT_DEV_DOMAIN')
         if not domain:
-            # Fallback to a generic domain if for some reason it's not set
-            domain = "royal-bingo.replit.app"
+            # Get from domains list if dev domain is not specifically set
+            domains = os.environ.get('REPLIT_DOMAINS')
+            if domains:
+                domain = domains.split(',')[0]
+            else:
+                domain = "royal-bingo.replit.app"
             
         web_url = f"https://{domain}/register"
         btn = types.InlineKeyboardButton("ተመዝገብ / Register", url=web_url)
