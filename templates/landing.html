@@ -1,21 +1,108 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container mt-5">
+<div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-6 text-center">
-            <h1 class="mb-4">Welcome to Royal Bingo</h1>
-            <div class="card shadow-sm p-4">
-                <h3>Step 1: Join our Telegram Bot</h3>
-                <p>To register, you must first start our Telegram bot to receive your verification code.</p>
-                <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg mb-3">
-                    <i class="bi bi-telegram"></i> Open Telegram Bot
-                </a>
-                <div class="mt-3">
-                    <p>Once you've started the bot, click the button below:</p>
-                    <a href="{{ url_for('signup') }}" class="btn btn-success btn-lg">I have joined</a>
+        <div class="col-lg-7 text-center">
+            <!-- Hero Section -->
+            <div class="hero-section mb-5">
+                <div class="mb-4">
+                    <img src="https://img.icons8.com/color/144/bingo.png" alt="Bingo Logo" class="img-fluid floating-icon">
                 </div>
+                <h1 class="display-3 fw-bold mb-3">Welcome to <span class="text-primary">Royal Bingo</span></h1>
+                <p class="lead fs-4 text-muted mb-5">Experience the ultimate bingo game. Play, win, and join our royal community!</p>
+            </div>
+
+            <!-- Steps Section -->
+            <div class="card p-4 p-md-5 mb-4 welcome-card">
+                <div class="step-badge mb-4 mx-auto">Step 1</div>
+                <h2 class="h3 mb-4">Join our Telegram Bot First</h2>
+                <p class="mb-5 fs-5">To get your verification code and start playing, you must first join our official Telegram bot.</p>
+                
+                <div class="d-grid gap-3">
+                    <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill">
+                        <i class="bi bi-telegram me-2"></i> Join Telegram Bot
+                    </a>
+                    
+                    <div class="separator my-3">
+                        <span>THEN</span>
+                    </div>
+                    
+                    <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2">
+                        I Have Joined
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-muted">
+                <small>Already have an account? <a href="{{ url_for('signup') }}" class="text-primary text-decoration-none">Sign In</a></small>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .hero-section {
+        animation: fadeInDown 1s ease-out;
+    }
+    
+    .welcome-card {
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        animation: fadeInUp 1s ease-out;
+    }
+    
+    .step-badge {
+        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
+        color: white;
+        padding: 10px 25px;
+        border-radius: 50px;
+        font-weight: bold;
+        display: inline-block;
+        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
+    }
+    
+    .separator {
+        position: relative;
+        text-align: center;
+    }
+    
+    .separator::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        right: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 1;
+    }
+    
+    .separator span {
+        background: #1a1f29;
+        padding: 0 15px;
+        color: #6c757d;
+        font-weight: bold;
+        font-size: 0.8rem;
+        position: relative;
+        z-index: 2;
+    }
+    
+    .floating-icon {
+        animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-15px); }
+    }
+    
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(30px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
 {% endblock %}
