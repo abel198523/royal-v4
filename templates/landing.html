@@ -1,40 +1,42 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 text-center">
-            <!-- Hero Section -->
-            <div class="hero-section mb-5">
-                <div class="mb-4">
-                    <img src="https://img.icons8.com/color/144/bingo.png" alt="Bingo Logo" class="img-fluid floating-icon">
-                </div>
-                <h1 class="display-3 fw-bold mb-3">Welcome to <span class="text-primary">Royal Bingo</span></h1>
-                <p class="lead fs-4 text-muted mb-5">Experience the ultimate bingo game. Play, win, and join our royal community!</p>
-            </div>
-
-            <!-- Steps Section -->
-            <div class="card p-4 p-md-5 mb-4 welcome-card">
-                <div class="step-badge mb-4 mx-auto">Step 1</div>
-                <h2 class="h3 mb-4">Join our Telegram Bot First</h2>
-                <p class="mb-5 fs-5">To get your verification code and start playing, you must first join our official Telegram bot.</p>
-                
-                <div class="d-grid gap-3">
-                    <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill">
-                        <i class="bi bi-telegram me-2"></i> Join Telegram Bot
-                    </a>
-                    
-                    <div class="separator my-3">
-                        <span>THEN</span>
+<div class="content-wrapper">
+    <div class="container py-5" id="main-content">
+        <div class="row justify-content-center">
+            <div class="col-lg-7 text-center">
+                <!-- Hero Section -->
+                <div class="hero-section mb-5">
+                    <div class="mb-4">
+                        <img src="https://img.icons8.com/color/144/bingo.png" alt="Bingo Logo" class="img-fluid floating-icon">
                     </div>
-                    
-                    <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2">
-                        I Have Joined
-                    </a>
+                    <h1 class="display-3 fw-bold mb-3">Welcome to <span class="text-primary">Royal Bingo</span></h1>
+                    <p class="lead fs-4 text-muted mb-5">Experience the ultimate bingo game. Play, win, and join our royal community!</p>
                 </div>
-            </div>
-            
-            <div class="text-muted">
-                <small>Already have an account? <a href="{{ url_for('signup') }}" class="text-primary text-decoration-none">Sign In</a></small>
+
+                <!-- Steps Section -->
+                <div class="card p-4 p-md-5 mb-4 welcome-card">
+                    <div class="step-badge mb-4 mx-auto">Step 1</div>
+                    <h2 class="h3 mb-4">Join our Telegram Bot First</h2>
+                    <p class="mb-5 fs-5">To get your verification code and start playing, you must first join our official Telegram bot.</p>
+                    
+                    <div class="d-grid gap-3">
+                        <a href="https://t.me/RoyalBingoV2P_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill">
+                            <i class="bi bi-telegram me-2"></i> Join Telegram Bot
+                        </a>
+                        
+                        <div class="separator my-3">
+                            <span>THEN</span>
+                        </div>
+                        
+                        <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2">
+                            I Have Joined
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="text-muted">
+                    <small>Already have an account? <a href="{{ url_for('signup') }}" class="text-primary text-decoration-none">Sign In</a></small>
+                </div>
             </div>
         </div>
     </div>

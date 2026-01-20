@@ -12,15 +12,30 @@
             color: #ffffff !important;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             min-height: 100vh;
-            margin: 0;
-            padding: 0;
-            display: block !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            visibility: visible !important;
+            opacity: 1 !important;
         }
         
-        #main-content, .container {
+        #main-content, .container, .row, .col-lg-7, .hero-section, .welcome-card {
             display: block !important;
             visibility: visible !important;
             opacity: 1 !important;
+            width: 100% !important;
+        }
+        
+        * {
+            box-sizing: border-box;
+            display: revert; /* Reset any potential global display:none */
+        }
+        
+        /* Ensure the main block content is never hidden */
+        .content-wrapper {
+            display: block !important;
+            visibility: visible !important;
         }
 
         .card {

@@ -118,7 +118,8 @@ def get_balance():
 
 @app.route("/")
 def index():
-    return redirect(url_for('landing'))
+    # Force direct rendering of landing to avoid any redirect issues on Render
+    return render_template("landing.html")
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])
 def buy_card(room_id):
