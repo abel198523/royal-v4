@@ -33,7 +33,7 @@ if BOT_TOKEN:
                 domain = "royal-bingo.replit.app"
             
         web_url = f"https://{domain}/register"
-        btn = types.InlineKeyboardButton("ተመዝገብ / Register", url=web_url)
+        btn = types.InlineKeyboardButton("ተመዝግቤያለሁ / I have joined", url=web_url)
         markup.add(btn)
         
         bot.reply_to(message, welcome_text, reply_markup=markup, parse_mode='Markdown')
