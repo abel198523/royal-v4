@@ -1,38 +1,54 @@
 // game.js - Corrected logic to show login-screen by default
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+    alert("An error occurred: " + msg + "\nAt: " + url + ":" + lineNo);
+    console.error(error);
+    return false;
+};
+
 window.onload = () => {
-    console.log("Game initialized on " + window.location.hostname);
-    
-    // Force visibility of main structural elements
-    const mainContent = document.getElementById('main-content');
-    if (mainContent) {
-        mainContent.style.setProperty('display', 'block', 'important');
-        mainContent.style.setProperty('visibility', 'visible', 'important');
+    try {
+        console.log("Game initialized on " + window.location.hostname);
+        
+        // Force visibility of main structural elements
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+            mainContent.style.setProperty('display', 'block', 'important');
+            mainContent.style.setProperty('visibility', 'visible', 'important');
+        }
+        
+        showLoginScreen();
+    } catch (e) {
+        alert("Startup error: " + e.message);
+        console.error(e);
     }
-    
-    showLoginScreen();
 };
 
 function showLoginScreen() {
-    // Hide all other screens if they exist
-    const gameScreen = document.getElementById('game-selection-screen');
-    const stakeScreen = document.getElementById('stake-screen');
-    const gameBoard = document.getElementById('game-board');
-    const appContainer = document.getElementById('app-container');
-    const mainContent = document.getElementById('main-content');
+    try {
+        // Hide all other screens if they exist
+        const gameScreen = document.getElementById('game-selection-screen');
+        const stakeScreen = document.getElementById('stake-screen');
+        const gameBoard = document.getElementById('game-board');
+        const appContainer = document.getElementById('app-container');
+        const mainContent = document.getElementById('main-content');
 
-    if (gameScreen) gameScreen.style.display = 'none';
-    if (stakeScreen) stakeScreen.style.display = 'none';
-    if (gameBoard) gameBoard.style.display = 'none';
-    
-    // Ensure app-container and main-content are NOT hidden
-    if (appContainer) appContainer.style.display = 'block';
-    if (mainContent) mainContent.style.display = 'block';
+        if (gameScreen) gameScreen.style.display = 'none';
+        if (stakeScreen) stakeScreen.style.display = 'none';
+        if (gameBoard) gameBoard.style.display = 'none';
+        
+        // Ensure app-container and main-content are NOT hidden
+        if (appContainer) appContainer.style.display = 'block';
+        if (mainContent) mainContent.style.display = 'block';
 
-    const loginScreen = document.getElementById('login-screen');
-    if (loginScreen) {
-        loginScreen.style.display = 'block';
-    } else {
-        console.error("login-screen element not found!");
+        const loginScreen = document.getElementById('login-screen');
+        if (loginScreen) {
+            loginScreen.style.display = 'block';
+        } else {
+            console.error("login-screen element not found!");
+            alert("Error: Login screen missing in HTML!");
+        }
+    } catch (e) {
+        alert("showLoginScreen error: " + e.message);
     }
 }
 
