@@ -121,12 +121,10 @@ def index():
     # In a real app, we would check for a session/cookie
     # For now, redirecting to landing if no user is found/hardcoded
     rooms = Room.query.all()
-    user = User.query.filter_by(telegram_chat_id='0980682889').first()
     
-    if not user:
-        return redirect(url_for('landing'))
-            
-    return render_template("index.html", rooms=rooms, balance=user.balance)
+    # Check if a specific user session should be simulated or redirect to landing
+    # For now, let's redirect to landing so user can see the starting point
+    return redirect(url_for('landing'))
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])
 def buy_card(room_id):
