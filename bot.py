@@ -28,8 +28,8 @@ if BOT_TOKEN:
             # Fallback to a generic domain if for some reason it's not set
             domain = "royal-bingo.replit.app"
             
-        web_url = f"https://{domain}"
-        btn = types.InlineKeyboardButton("ወደ ዌብሳይቱ ይሂዱ", url=web_url)
+        web_url = f"https://{domain}/register"
+        btn = types.InlineKeyboardButton("ተመዝገብ / Register", url=web_url)
         markup.add(btn)
         
         bot.reply_to(message, welcome_text, reply_markup=markup, parse_mode='Markdown')
