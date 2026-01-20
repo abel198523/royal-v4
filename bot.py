@@ -2,6 +2,8 @@ import os
 import telebot
 from flask import request, jsonify
 
+from telebot import types
+
 # Get token from environment
 BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
@@ -20,9 +22,14 @@ if BOT_TOKEN:
             "ይህንን ቁጥር በመያዝ ወደ ዌብሳይቱ ተመልሰው ምዝገባዎን ያጠናቅቁ።"
         )
         
-        markup = telebot.types.InlineKeyboardMarkup()
-        web_url = f"https://{os.environ.get('REPLIT_DEV_DOMAIN')}"
-        btn = telebot.types.InlineKeyboardButton("ወደ ዌብሳይቱ ይሂዱ", url=web_url)
+        markup = types.InlineKeyboardMarkup()
+        domain = os.environ.get('REPLIT_DEV_DOMAIN')
+        if not domain:
+            # Fallback to a generic domain if for some reason it's not set
+            domain = "royal-bingo.replit.app"
+            
+        web_url = f"https://{domain}"
+        btn = types.InlineKeyboardButton("ወደ ዌብሳይቱ ይሂዱ", url=web_url)
         markup.add(btn)
         
         bot.reply_to(message, welcome_text, reply_markup=markup, parse_mode='Markdown')
