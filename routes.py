@@ -54,11 +54,51 @@ def signup():
 
 @app.route("/send-otp", methods=["POST"])
 def send_otp():
-    return jsonify({"success": False, "message": "Disabled"}), 403
+    data = request.json
+    username = data.get('username')
+    telegram_chat_id = data.get('telegram_chat_id')
+    
+    if not username or not telegram_chat_id:
+        return jsonify({"success": False, "message": "Missing username or chat ID"}), 400
+        
+    otp = str(random.randint(100000, 999999))
+    OTPS[telegram_chat_id] = otp
+    
+    if bot:
+        try:
+            bot.send_message(telegram_chat_id, f"Your verification code is: {otp}")
+            return jsonify({"success": True})
+        except Exception as e:
+            return jsonify({"success": False, "message": f"Could not send message to Telegram: {str(e)}"}), 500
+    
+    return jsonify({"success": False, "message": "Bot not initialized"}), 500
 
 @app.route("/verify-otp", methods=["POST"])
 def verify_otp():
-    return jsonify({"success": False, "message": "Disabled"}), 403
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    telegram_chat_id = data.get('telegram_chat_id')
+    otp = data.get('otp')
+    
+    if OTPS.get(telegram_chat_id) == otp:
+        # Check if user already exists
+        if User.query.filter_by(username=username).first():
+            return jsonify({"success": False, "message": "Username already taken"}), 400
+            
+        new_user = User(
+            username=username,
+            password_hash=generate_password_hash(password),
+            telegram_chat_id=telegram_chat_id
+        )
+        db.session.add(new_user)
+        db.session.commit()
+        
+        # Clear OTP
+        del OTPS[telegram_chat_id]
+        return jsonify({"success": True})
+    
+    return jsonify({"success": False, "message": "Invalid verification code"}), 400
 
 @app.route("/api/user/balance")
 def get_balance():
