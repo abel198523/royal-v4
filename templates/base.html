@@ -98,6 +98,10 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             <a class="navbar-brand" href="/">ROYAL BINGO</a>
+            <div class="ms-auto">
+                <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-sm me-2">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn btn-primary btn-sm">Sign Up</a>
+            </div>
         </div>
     </nav>
     {% block content %}{% endblock %}
