@@ -1,8 +1,17 @@
 import os
 import telebot
-from flask import render_template, request, jsonify, redirect, url_for
+from flask import render_template, request, jsonify, redirect, url_for, session
 from app import app, db
 from models import User, Room, Transaction, GameSession
+from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 import random
 import requests
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -58,7 +67,7 @@ def login():
         
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password_hash, password):
-            # For now, we redirect to home which shows rooms
+            login_user(user)
             return jsonify({"success": True, "redirect": url_for('index')})
         return jsonify({"success": False, "message": "Invalid username or password"}), 401
     return render_template("login.html")
@@ -122,13 +131,18 @@ def get_balance():
     return jsonify({"balance": 0.0, "error": "Disabled"}), 403
 
 @app.route("/")
+@login_required
 def index():
-    # If user is logged in (conceptually), we would show rooms
-    # For now, let's see if we have rooms in the database
     rooms = Room.query.all()
-    if rooms:
-        return render_template("index.html", rooms=rooms)
-    return render_template("landing.html")
+    # Ensure rooms exist for the user to see
+    if not rooms:
+        # Create some default rooms if none exist for testing/initial setup
+        room1 = Room(name="Room 1", card_price=10.0)
+        room2 = Room(name="Room 2", card_price=20.0)
+        db.session.add_all([room1, room2])
+        db.session.commit()
+        rooms = [room1, room2]
+    return render_template("index.html", rooms=rooms, balance=current_user.balance)
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])
 def buy_card(room_id):
