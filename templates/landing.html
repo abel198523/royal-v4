@@ -1,113 +1,38 @@
 {% extends "base.html" %}
 {% block content %}
-<div class="content-wrapper">
-    <div class="container py-5" id="main-content" style="display: block !important; visibility: visible !important; opacity: 1 !important;">
-        <div class="row justify-content-center">
-            <div class="col-lg-8 text-center">
-                <!-- Hero Section -->
-                <div class="hero-section mb-5">
-                    <div class="mb-4">
-                        <img src="https://img.icons8.com/color/144/bingo.png" alt="Bingo Logo" class="img-fluid floating-icon">
-                    </div>
-                    <h1 class="display-3 fw-bold mb-3">Welcome to <span class="text-primary">Royal Bingo</span></h1>
-                    <p class="lead fs-4 text-muted mb-5">Experience the ultimate bingo game. Play, win, and join our royal community!</p>
-                </div>
-
-                <!-- Steps Section -->
-                <div class="card p-4 p-md-5 mb-4 welcome-card shadow-lg" style="background-color: #1a1f29 !important; border: 1px solid rgba(255,255,255,0.1) !important;">
-                    <div class="step-badge mb-4 mx-auto">Step 1</div>
-                    <h2 class="h3 mb-4 text-white">Join our Telegram Bot First</h2>
-                    <p class="mb-5 fs-5 text-light">To get your verification code and start playing, you must first join our official Telegram bot.</p>
-                    
-                    <div class="d-grid gap-3">
-                        <a href="https://t.me/hhkhdfyc_bot" target="_blank" class="btn btn-primary btn-lg py-3 rounded-pill fw-bold shadow">
-                            <i class="bi bi-telegram me-2"></i> Join Telegram Bot
-                        </a>
-                        
-                        <div class="separator my-3">
-                            <span style="background: #1a1f29 !important; color: #6c757d !important;">THEN</span>
-                        </div>
-                        
-                        <a href="{{ url_for('signup') }}" class="btn btn-outline-success btn-lg py-3 rounded-pill border-2 fw-bold">
-                            ተመዝግቤያለሁ / I have joined
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="text-muted mt-4">
-                    <p>Already have an account? <a href="{{ url_for('login') }}" class="text-primary text-decoration-none fw-bold">Sign In Here</a></p>
-                </div>
+<div id="main-content" class="d-flex flex-column justify-content-center align-items-center text-center">
+    <div class="animate-in">
+        <div class="mb-4">
+            <div class="d-inline-flex p-4 rounded-circle bg-primary bg-opacity-10 shadow-lg border border-primary border-opacity-20 floating">
+                <i class="bi bi-trophy-fill text-primary display-3"></i>
             </div>
+        </div>
+        <h1 class="display-4 fw-bold mb-2 tracking-tight text-white">ROYAL BINGO</h1>
+        <p class="lead text-muted mb-5 px-3">Premium Gaming. Instant Rewards.</p>
+    </div>
+    
+    <div class="d-grid gap-3 w-100 px-4" style="max-width: 360px;">
+        <a href="https://t.me/hhkhdfyc_bot" target="_blank" class="btn btn-primary btn-lg shadow-lg d-flex align-items-center justify-content-center">
+            <i class="bi bi-telegram fs-4 me-2"></i> Join Telegram First
+        </a>
+        <div class="d-flex gap-2">
+            <a href="{{ url_for('login') }}" class="btn btn-outline-light flex-grow-1">Login</a>
+            <a href="{{ url_for('signup') }}" class="btn btn-outline-success flex-grow-1">Sign Up</a>
         </div>
     </div>
 </div>
 
 <style>
-    #main-content {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-    
-    .hero-section {
-        animation: fadeInDown 1s ease-out;
-    }
-    
-    .welcome-card {
-        animation: fadeInUp 1s ease-out;
-    }
-    
-    .step-badge {
-        background: linear-gradient(135deg, #0d6efd, #0b5ed7);
-        color: white;
-        padding: 10px 25px;
-        border-radius: 50px;
-        font-weight: bold;
-        display: inline-block;
-        box-shadow: 0 4px 15px rgba(13, 110, 253, 0.3);
-    }
-    
-    .separator {
-        position: relative;
-        text-align: center;
-    }
-    
-    .separator::before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: 0;
-        right: 0;
-        height: 1px;
-        background: rgba(255, 255, 255, 0.1);
-        z-index: 1;
-    }
-    
-    .separator span {
-        padding: 0 15px;
-        font-weight: bold;
-        font-size: 0.9rem;
-        position: relative;
-        z-index: 2;
-    }
-    
-    .floating-icon {
-        animation: float 3s ease-in-out infinite;
-    }
-    
     @keyframes float {
         0%, 100% { transform: translateY(0); }
-        50% { transform: translateY(-15px); }
+        50% { transform: translateY(-10px); }
     }
-    
-    @keyframes fadeInDown {
-        from { opacity: 0; transform: translateY(-30px); }
-        to { opacity: 1; transform: translateY(0); }
-    }
-    
+    .floating { animation: float 3s ease-in-out infinite; }
+    .animate-in { animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
     @keyframes fadeInUp {
-        from { opacity: 0; transform: translateY(30px); }
+        from { opacity: 0; transform: translateY(20px); }
         to { opacity: 1; transform: translateY(0); }
     }
 </style>
+{% endblock %}
 {% endblock %}
