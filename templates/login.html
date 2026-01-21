@@ -40,7 +40,7 @@ document.getElementById('login-form').onsubmit = async (e) => {
         });
         const data = await response.json();
         if (data.success) {
-            window.location.href = '/';
+            window.location.href = data.redirect || '/';
         } else {
             errorMsg.innerText = data.message;
         }

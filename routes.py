@@ -58,7 +58,8 @@ def login():
         
         user = User.query.filter_by(username=username).first()
         if user and check_password_hash(user.password_hash, password):
-            return jsonify({"success": True})
+            # For now, we redirect to home which shows rooms
+            return jsonify({"success": True, "redirect": url_for('index')})
         return jsonify({"success": False, "message": "Invalid username or password"}), 401
     return render_template("login.html")
 
