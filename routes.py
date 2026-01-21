@@ -45,9 +45,12 @@ def get_or_create_session(room_id):
 def landing():
     return render_template("landing.html")
 
-@app.route("/signup")
+@app.route("/signup", methods=["GET", "POST"])
 def signup():
-    return redirect(url_for('index'))
+    if request.method == "POST":
+        # Handle registration logic here
+        return redirect(url_for('index'))
+    return render_template("signup.html")
 
 @app.route("/send-otp", methods=["POST"])
 def send_otp():
