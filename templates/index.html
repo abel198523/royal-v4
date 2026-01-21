@@ -92,24 +92,23 @@
 
     <!-- Card Selection Modal/Screen -->
     <div id="card-selection-screen" style="display: none;">
-        <div class="row mb-4">
-            <div class="col-12 d-flex justify-content-between align-items-center">
-                <button onclick="hideCardSelection()" class="btn btn-outline-light">
-                    <i class="bi bi-arrow-left me-2"></i>Back to Rooms
+        <div class="selection-header">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <button onclick="hideCardSelection()" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-arrow-left"></i>
                 </button>
-                <div class="text-center">
-                    <h2 id="selected-room-name" class="fw-bold mb-0"></h2>
-                    <p class="text-muted mb-0">Stake: <span id="selected-room-price"></span> ETB</p>
+                <h4 id="selected-room-name" class="fw-bold mb-0 text-white"></h4>
+                <div class="text-success fw-bold small">
+                    <span id="selection-balance">{{ "%.2f"|format(balance) }}</span> ETB
                 </div>
-                <div class="text-success fw-bold">
-                    Balance: <span id="selection-balance">{{ "%.2f"|format(balance) }}</span> ETB
-                </div>
+            </div>
+            <div class="text-center small text-muted">
+                Stake: <span id="selected-room-price"></span> ETB | Select your lucky card
             </div>
         </div>
         
-        <div class="card bg-dark border-secondary p-4 mb-4">
-            <h5 class="text-center mb-4 text-light">Select your lucky card (1-100)</h5>
-            <div class="card-grid d-flex flex-wrap justify-content-center gap-2">
+        <div class="card-grid-container">
+            <div class="card-grid">
                 {% for i in range(1, 101) %}
                 <button onclick="buySpecificCard({{ i }})" id="card-{{ i }}" class="btn btn-outline-primary card-number-btn">
                     {{ i }}
