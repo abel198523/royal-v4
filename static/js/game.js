@@ -1,7 +1,6 @@
 // game.js - Corrected logic to show login-screen by default
 window.onerror = function(msg, url, lineNo, columnNo, error) {
-    alert("An error occurred: " + msg + "\nAt: " + url + ":" + lineNo);
-    console.error(error);
+    console.error("Error: " + msg + "\nAt: " + url + ":" + lineNo);
     return false;
 };
 
@@ -16,9 +15,17 @@ window.onload = () => {
             mainContent.style.setProperty('visibility', 'visible', 'important');
         }
         
-        showLoginScreen();
+        // If walletBalance exists, it means we are on the game selection screen (index.html)
+        // and current_user is authenticated. In this case, we don't show login screen.
+        if (document.getElementById('walletBalance')) {
+             const gameScreen = document.getElementById('game-selection-screen');
+             if (gameScreen) gameScreen.style.setProperty('display', 'block', 'important');
+             const loginScreen = document.getElementById('login-screen');
+             if (loginScreen) loginScreen.style.setProperty('display', 'none', 'important');
+        } else {
+            showLoginScreen();
+        }
     } catch (e) {
-        alert("Startup error: " + e.message);
         console.error(e);
     }
 };
@@ -62,9 +69,21 @@ async function login() {
         return;
     }
 
-    // For now, redirecting to signup as requested or simulating login
-    // In a real scenario, this would be a fetch to /login
-    window.location.href = "/signup";
+    try {
+        const response = await fetch('/login', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ username, password })
+        });
+        const data = await response.json();
+        if (data.success) {
+            window.location.href = data.redirect || '/';
+        } else {
+            if (errorMsg) errorMsg.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+        }
+    } catch (e) {
+        if (errorMsg) errorMsg.innerHTML = '<div class="alert alert-danger">Login failed</div>';
+    }
 }
 
 async function refreshBalance() {

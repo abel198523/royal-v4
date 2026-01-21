@@ -130,18 +130,34 @@ def verify_otp():
 def get_balance():
     return jsonify({"balance": 0.0, "error": "Disabled"}), 403
 
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('landing'))
+
 @app.route("/")
 @login_required
 def index():
-    rooms = Room.query.all()
-    # Ensure rooms exist for the user to see
+    # Attempt to use the existing Room table, handle if it doesn't exist
+    try:
+        rooms = Room.query.all()
+    except Exception:
+        db.create_all()
+        rooms = Room.query.all()
+        
     if not rooms:
-        # Create some default rooms if none exist for testing/initial setup
+        # Create some default rooms if none exist
         room1 = Room(name="Room 1", card_price=10.0)
         room2 = Room(name="Room 2", card_price=20.0)
         db.session.add_all([room1, room2])
-        db.session.commit()
-        rooms = [room1, room2]
+        try:
+            db.session.commit()
+            rooms = [room1, room2]
+        except Exception:
+            db.session.rollback()
+            rooms = []
+            
     return render_template("index.html", rooms=rooms, balance=current_user.balance)
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])
