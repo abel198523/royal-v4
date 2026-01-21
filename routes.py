@@ -108,7 +108,11 @@ def get_balance():
 
 @app.route("/")
 def index():
-    # Force direct rendering of landing to avoid any redirect issues on Render
+    # If user is logged in (conceptually), we would show rooms
+    # For now, let's see if we have rooms in the database
+    rooms = Room.query.all()
+    if rooms:
+        return render_template("index.html", rooms=rooms)
     return render_template("landing.html")
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])

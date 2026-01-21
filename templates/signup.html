@@ -87,6 +87,7 @@ async function verifyAndRegister() {
         });
         const data = await response.json();
         if (data.success) {
+            // After registration, redirect to rooms page
             window.location.href = '/';
         } else {
             errorMsg.innerText = data.message;
