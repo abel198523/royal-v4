@@ -127,8 +127,9 @@ def verify_otp():
     return jsonify({"success": False, "message": "Invalid verification code"}), 400
 
 @app.route("/api/user/balance")
+@login_required
 def get_balance():
-    return jsonify({"balance": 0.0, "error": "Disabled"}), 403
+    return jsonify({"balance": current_user.balance})
 
 @app.route("/logout")
 @login_required
@@ -161,8 +162,26 @@ def index():
     return render_template("index.html", rooms=rooms, balance=current_user.balance)
 
 @app.route("/buy-card/<int:room_id>", methods=["POST"])
+@login_required
 def buy_card(room_id):
-    return jsonify({"success": False, "message": "Disabled"}), 403
+    room = Room.query.get_or_404(room_id)
+    if current_user.balance < room.card_price:
+        return jsonify({"success": False, "message": "የሂሳብ መጠንዎ በቂ አይደለም / Insufficient balance"}), 400
+    
+    current_user.balance -= room.card_price
+    transaction = Transaction(
+        user_id=current_user.id,
+        room_id=room.id,
+        amount=room.card_price
+    )
+    db.session.add(transaction)
+    db.session.commit()
+    
+    return jsonify({
+        "success": True, 
+        "message": "ካርዱን በተሳካ ሁኔታ ገዝተዋል / Card purchased successfully",
+        "new_balance": current_user.balance
+    })
 
 @app.route("/declare-winner/<int:room_id>", methods=["POST"])
 def declare_winner(room_id):
