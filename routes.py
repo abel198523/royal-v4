@@ -5,7 +5,7 @@ from app import app, db
 from models import User, Room, Transaction, GameSession
 import random
 import requests
-from werkzeug.security import generate_password_hash
+from werkzeug.security import generate_password_hash, check_password_hash
 from bot import bot, BOT_TOKEN
 
 @app.route('/webhook/' + (BOT_TOKEN if BOT_TOKEN else 'token'), methods=['POST'])
@@ -47,10 +47,24 @@ def get_or_create_session(room_id):
 def landing():
     return render_template("landing.html")
 
+from werkzeug.security import generate_password_hash, check_password_hash
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if request.method == "POST":
+        data = request.json
+        username = data.get('username')
+        password = data.get('password')
+        
+        user = User.query.filter_by(username=username).first()
+        if user and check_password_hash(user.password_hash, password):
+            return jsonify({"success": True})
+        return jsonify({"success": False, "message": "Invalid username or password"}), 401
+    return render_template("login.html")
+
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
     if request.method == "POST":
-        # Handle registration logic here
         return redirect(url_for('index'))
     return render_template("signup.html")
 
