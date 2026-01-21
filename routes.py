@@ -34,7 +34,9 @@ def get_or_create_session(room_id):
             session = None
             
     if not session:
-        session = GameSession(room_id=room_id, status='active')
+        session = GameSession()
+        session.room_id = room_id
+        session.status = 'active'
         db.session.add(session)
         db.session.flush()
         room.active_session_id = session.id
@@ -86,11 +88,11 @@ def verify_otp():
         if User.query.filter_by(username=username).first():
             return jsonify({"success": False, "message": "Username already taken"}), 400
             
-        new_user = User(
-            username=username,
-            password_hash=generate_password_hash(password),
-            telegram_chat_id=telegram_chat_id
-        )
+        new_user = User()
+        new_user.username = username
+        new_user.password_hash = generate_password_hash(password)
+        new_user.telegram_chat_id = telegram_chat_id
+        
         db.session.add(new_user)
         db.session.commit()
         
