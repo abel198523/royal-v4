@@ -80,13 +80,42 @@
                             </div>
                         </div>
                         
-                        <button onclick="buyCard({{ room.id }})" class="btn btn-primary w-100 py-3 fw-bold shadow-sm buy-btn">
-                            <i class="bi bi-cart-plus me-2"></i>Buy Stake Card
+                        <button onclick="showCardSelection({{ room.id }}, '{{ room.name }}', {{ room.card_price }})" class="btn btn-primary w-100 py-3 fw-bold shadow-sm buy-btn">
+                            <i class="bi bi-grid-3x3-gap me-2"></i>Select Card
                         </button>
                     </div>
                 </div>
             </div>
             {% endfor %}
+        </div>
+    </div>
+
+    <!-- Card Selection Modal/Screen -->
+    <div id="card-selection-screen" style="display: none;">
+        <div class="row mb-4">
+            <div class="col-12 d-flex justify-content-between align-items-center">
+                <button onclick="hideCardSelection()" class="btn btn-outline-light">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Rooms
+                </button>
+                <div class="text-center">
+                    <h2 id="selected-room-name" class="fw-bold mb-0"></h2>
+                    <p class="text-muted mb-0">Stake: <span id="selected-room-price"></span> ETB</p>
+                </div>
+                <div class="text-success fw-bold">
+                    Balance: <span id="selection-balance">{{ "%.2f"|format(balance) }}</span> ETB
+                </div>
+            </div>
+        </div>
+        
+        <div class="card bg-dark border-secondary p-4 mb-4">
+            <h5 class="text-center mb-4 text-light">Select your lucky card (1-100)</h5>
+            <div class="card-grid d-flex flex-wrap justify-content-center gap-2">
+                {% for i in range(1, 101) %}
+                <button onclick="buySpecificCard({{ i }})" id="card-{{ i }}" class="btn btn-outline-primary card-number-btn">
+                    {{ i }}
+                </button>
+                {% endfor %}
+            </div>
         </div>
     </div>
 

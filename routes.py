@@ -161,25 +161,41 @@ def index():
             
     return render_template("index.html", rooms=rooms, balance=current_user.balance)
 
-@app.route("/buy-card/<int:room_id>", methods=["POST"])
+@app.route("/buy-card/<int:room_id>/<int:card_number>", methods=["POST"])
 @login_required
-def buy_card(room_id):
+def buy_card(room_id, card_number):
     room = Room.query.get_or_404(room_id)
+    if card_number < 1 or card_number > 100:
+        return jsonify({"success": False, "message": "Invalid card number"}), 400
+        
     if current_user.balance < room.card_price:
         return jsonify({"success": False, "message": "የሂሳብ መጠንዎ በቂ አይደለም / Insufficient balance"}), 400
     
+    # Check if card is already taken in this session
+    session = get_or_create_session(room_id)
+    existing_ticket = Transaction.query.filter_by(
+        room_id=room_id, 
+        session_id=session.id, 
+        card_number=card_number
+    ).first()
+    
+    if existing_ticket:
+        return jsonify({"success": False, "message": f"ካርድ ቁጥር {card_number} ተይዟል / Card {card_number} is already taken"}), 400
+
     current_user.balance -= room.card_price
     transaction = Transaction(
         user_id=current_user.id,
         room_id=room.id,
-        amount=room.card_price
+        session_id=session.id,
+        amount=room.card_price,
+        card_number=card_number
     )
     db.session.add(transaction)
     db.session.commit()
     
     return jsonify({
         "success": True, 
-        "message": "ካርዱን በተሳካ ሁኔታ ገዝተዋል / Card purchased successfully",
+        "message": f"ካርድ ቁጥር {card_number} በተሳካ ሁኔታ ገዝተዋል / Card {card_number} purchased successfully",
         "new_balance": current_user.balance
     })
 

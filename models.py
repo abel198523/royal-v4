@@ -33,4 +33,5 @@ class Transaction(db.Model):
     room_id = db.Column(db.Integer, db.ForeignKey('room.id'), nullable=False)
     session_id = db.Column(db.Integer, db.ForeignKey('game_sessions.id'))
     amount = db.Column(db.Float, nullable=False)
+    card_number = db.Column(db.Integer, nullable=True)
     timestamp = db.Column(db.DateTime, server_default=db.func.now())

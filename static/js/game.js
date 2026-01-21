@@ -99,22 +99,46 @@ async function refreshBalance() {
     }
 }
 
-async function buyCard(roomId) {
-    const response = await fetch(`/buy-card/${roomId}`, { method: 'POST' });
+let currentRoomId = null;
+
+function showCardSelection(roomId, roomName, roomPrice) {
+    currentRoomId = roomId;
+    document.getElementById('selected-room-name').innerText = roomName;
+    document.getElementById('selected-room-price').innerText = roomPrice.toFixed(2);
+    document.getElementById('game-selection-screen').style.display = 'none';
+    document.getElementById('card-selection-screen').style.display = 'block';
+    
+    // We would ideally fetch taken cards here
+    // For now, reset all cards
+    document.querySelectorAll('.card-number-btn').forEach(btn => {
+        btn.classList.remove('taken');
+    });
+}
+
+function hideCardSelection() {
+    document.getElementById('game-selection-screen').style.display = 'block';
+    document.getElementById('card-selection-screen').style.display = 'none';
+    currentRoomId = null;
+}
+
+async function buySpecificCard(cardNumber) {
+    if (!currentRoomId) return;
+    
+    const response = await fetch(`/buy-card/${currentRoomId}/${cardNumber}`, { 
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+    });
     const data = await response.json();
     const messageDiv = document.getElementById('statusMessage');
     
     if (data.success) {
-        const balanceEl = document.getElementById('walletBalance');
-        if (balanceEl) balanceEl.innerText = data.new_balance.toFixed(2);
-        
-        const playerEl = document.getElementById(`playerCount-${roomId}`);
-        if (playerEl && data.players !== undefined) playerEl.innerText = data.players;
-        
-        const prizeEl = document.getElementById(`prizeAmount-${roomId}`);
-        if (prizeEl && data.prize !== undefined) prizeEl.innerText = data.prize.toFixed(2);
-        
         if (messageDiv) messageDiv.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+        const balanceEls = [document.getElementById('walletBalance'), document.getElementById('selection-balance')];
+        balanceEls.forEach(el => {
+            if (el) el.innerText = data.new_balance.toFixed(2);
+        });
+        // Mark card as taken
+        document.getElementById(`card-${cardNumber}`).classList.add('taken');
     } else {
         if (messageDiv) messageDiv.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
     }
